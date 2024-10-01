@@ -17,6 +17,7 @@ export interface DynamicFieldsData {
   formControlKey: string;
   lovDataList?: AppLOVData[];
   type?: string;
+  className?: string;
 }
 
 export interface SelectedFieldValueEmit {

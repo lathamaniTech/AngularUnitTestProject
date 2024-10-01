@@ -27,6 +27,14 @@ import { PostService } from "../../services/posts/post.service";
 import { MapDataToDynamicFieldService } from "../../services/dynamicForm/map-data-to-dynamic-field.service";
 import { DynamicFormComponent } from "../dynamic-form/dynamic-form.component";
 import { NgChartsComponent } from "../ng-charts/ng-charts.component";
+
+import {
+  DynamicCardsConfiguration,
+  NgxSuperDashboardModule,
+} from "ngx-super-dashboard";
+
+import { DynamicCardsData } from "../../Utils/CardsConfiguration";
+
 declare const google: any;
 
 @Component({
@@ -37,6 +45,7 @@ declare const google: any;
     GoogleChartsModule,
     DynamicFormComponent,
     NgChartsComponent,
+    NgxSuperDashboardModule,
   ],
   templateUrl: "./dashboard-lend.component.html",
   styleUrl: "./dashboard-lend.component.scss",
@@ -44,14 +53,22 @@ declare const google: any;
 })
 export class DashboardLendComponent implements OnInit, AfterViewInit {
   searchFormFields: DynamicFieldsData[] = DynamicFieldsConfiguration;
-  columnChartType = ChartType.ComboChart;
-  // barChartType = ChartType.BarChart;
-  piChart = ChartType.PieChart;
 
-  initianSearchIndex = 0;
+  countCardsListData: DynamicCardsData[] = [
+    { title: "Total Proposals", value: 700 },
+    { title: "On Process", value: 230 },
+    { title: "Sanctioned", value: 300 },
+    { title: "Rejected", value: 254 },
+    { title: "Opened prending for > 30 days", value: 143 },
+    { title: "Disbursed", value: 120 },
+  ];
+
+  columnChartType = ChartType.ComboChart;
+  piChart = ChartType.PieChart;
 
   columnChartOptions = {
     myColumns: ["Year", "Retail", "Agri", "MSME", "Gold", "Corp"],
+
     chartOptions: {
       title: `Monthly Wise`,
       chartArea: { width: "50%" },
@@ -63,7 +80,7 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
         title: "No. Of Amount",
       },
       seriesType: "bars",
-      series: { 4: { type: "line" } },
+      // series: { 4: { type: "line" } },
     },
   };
 
@@ -76,6 +93,13 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
     chartOptions: {
       title: `Sanctioned Amount`,
       chartArea: { width: "50%" },
+      slices: {
+        0: { color: "#622248" },
+        1: { color: "#109618" },
+        2: { color: "#3366cc" },
+        3: { color: "red" },
+        4: { color: "#ff9900" },
+      },
       // hAxis: {
       //   title: `Quantity`,
       //   minValue: 0,
@@ -149,7 +173,6 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
       Number(rec.agri) +
       Number(rec.gold) +
       Number(rec.msme);
-    console.log(val);
     return val ? val : "";
   }
   getListOfProducts() {
@@ -174,40 +197,6 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
 
   onSelectChart(ev: ChartEventEmitOnSelect) {
     console.log(ev);
-    this.initianSearchIndex += 1;
-    if (this.initianSearchIndex < ChartConfiguration.SearchCriterias.length) {
-      // this.pieChartData$ = this.taskservice.fetchChartsData(
-      //   ChartConfiguration.SearchCriterias[this.initianSearchIndex],
-      //   true
-      // );
-      if (ev.chartType == "ColumnChart") {
-        this.columnChartOptions.chartOptions = {
-          ...this.columnChartOptions.chartOptions,
-          title: `Lead Summary of ${
-            ChartConfiguration.SearchCriterias[this.initianSearchIndex]
-          }`,
-          hAxis: {
-            title: `${
-              ChartConfiguration.SearchCriterias[this.initianSearchIndex]
-            }`,
-            minValue: 0,
-          },
-        };
-      } else {
-        this.pieChartOptions.chartOptions = {
-          ...this.pieChartOptions.chartOptions,
-          // title: `Lead Summary of ${
-          //   ChartConfiguration.SearchCriterias[this.initianSearchIndex]
-          // }`,
-          // hAxis: {
-          //   title: `${
-          //     ChartConfiguration.SearchCriterias[this.initianSearchIndex]
-          //   }`,
-          //   minValue: 0,
-          // },
-        };
-      }
-    }
   }
 
   getZoneDropDownsData() {
@@ -301,7 +290,7 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
 
   // get selected field dropDown value and formcontrol name
 
-  seletedValue(ev: SelectedFieldValueEmit) {
+  OnSelected(ev: { fieldControlName: string; selectedValue: any }) {
     if (ev.fieldControlName == "zonal") {
       let zonalOrgCode = this.modifiedLovData.listOfZonal.find((val: any) => {
         return val.value == ev.selectedValue;
@@ -325,7 +314,7 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
     });
   }
 
-  submitFormData(formData: any) {
+  OnSearchSubmit(formData: any) {
     console.log(formData);
   }
 }
