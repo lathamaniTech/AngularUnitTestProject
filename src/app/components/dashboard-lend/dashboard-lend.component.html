@@ -1,3 +1,5 @@
+<!-- <lib-ngx-super-dashboard [dynamicFormFieldData]="searchFormFields" ></lib-ngx-super-dashboard> -->
+
 <div class="content-area">
   <app-dynamic-form
     [dynamicFormFieldData]="searchFormFields"
@@ -41,9 +43,7 @@
           [chartOptionData]="columnChartOptions"
           (chartColumnSelect)="onSelectChart($event)"
         ></app-ng-charts>
-        <!-- }@else{
-        <div>No Data</div>
-        } -->
+      
       </div>
 
       <div class="card card-border-bottom">
@@ -51,7 +51,6 @@
           <h3>Total Amount Sanctioned</h3>
         </div>
         @if( pieChartData$ | async; as myData ){
-
         <app-ng-charts
           [chartData]="myData"
           [chartType]="piChart"

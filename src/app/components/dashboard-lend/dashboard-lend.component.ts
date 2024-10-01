@@ -22,6 +22,7 @@ import {
   DynamicFieldsData,
   SelectedFieldValueEmit,
   SetDataOption,
+  testFieldData,
 } from "../../Utils/DynamicFieldsConfiguration";
 import { PostService } from "../../services/posts/post.service";
 import { MapDataToDynamicFieldService } from "../../services/dynamicForm/map-data-to-dynamic-field.service";
@@ -52,7 +53,9 @@ declare const google: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardLendComponent implements OnInit, AfterViewInit {
-  searchFormFields: DynamicFieldsData[] = DynamicFieldsConfiguration;
+  searchFormFields: DynamicFieldsData[] = DynamicFieldsConfiguration(testFieldData);;
+  columnChartType = ChartType.ComboChart;
+  piChart = ChartType.PieChart;
 
   countCardsListData: DynamicCardsData[] = [
     { title: "Total Proposals", value: 700 },
@@ -62,9 +65,6 @@ export class DashboardLendComponent implements OnInit, AfterViewInit {
     { title: "Opened prending for > 30 days", value: 143 },
     { title: "Disbursed", value: 120 },
   ];
-
-  columnChartType = ChartType.ComboChart;
-  piChart = ChartType.PieChart;
 
   columnChartOptions = {
     myColumns: ["Year", "Retail", "Agri", "MSME", "Gold", "Corp"],
