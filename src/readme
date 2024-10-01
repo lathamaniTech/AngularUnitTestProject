@@ -1,0 +1,215 @@
+# Super Dashboard Component
+
+install this component in your project and use where ever you want.
+
+<lib-ngx-super-dashboard>
+[SearchFormFields]="searchFormData"
+(onSelect)="OnSelected($event)"
+(onSubmit)="OnSearchSubmit($event)"
+
+[cardConfig]="countCardsListData | false"
+
+[chartsConfig]="DashboardChartConfig"
+(onSelectChart)="selectedChart($event)"
+
+[gridOneConfig]="cardTableData"
+
+[gridTwoConfig]="gridTableData | false"
+
+</lib-ngx-super-dashboard>
+
+# Usage
+
+** --- Start Dynamic Form Related Information ---- **
+
+add fields based on your requirment in DynamicFieldsConfiguration function as argument
+
+# Example:
+
+in ts:
+
+searchFormData = DynamicFieldsConfiguration([
+{ lable: "Zone", formControlKey: "zone", lovDataList: [] },
+{ lable: "Branch", formControlKey: "branch", lovDataList: [] },
+{ lable: "Teams", formControlKey: "teams", lovDataList: [] },
+{ lable: "Product", formControlKey: "product", lovDataList: [] },
+{ lable: "Start Date", formControlKey: "startDate", type: "date" },
+{ lable: "End Date", formControlKey: "endDate", type: "date" }
+];)
+
+Here, lable -- is for form control lable name like 'Zonal',
+formControlKey -- is for form control name like 'zonal',
+lovDataList -- is for dropdown array data
+type --- is for type of input field
+
+# Events Emitters:
+
+    selectedField($event): it return a value of selected dropdown data.
+    example: {selectedValue: '1', fieldControlName: 'zonal'}
+
+    onSubmit($ev): it return a values of form data on form submit.
+
+** --- Ended Dynamic Form Related Information ---- **
+
+** ---- Start Card List information ---- **
+
+# Left Cards List:
+
+This is for left side grid cards section. Pass data in DynamicCountCardsConfiguration function arguement.
+
+example:
+countCardsListData = DynamicCountCardsConfiguration([
+{ title: "Total Proposals", subTitle:"", value: 700, className:""},
+{ title: "On Process", value: 230 },
+{ title: "Sanctioned", value: 300 },
+{ title: "Rejected", value: 254 },
+{ title: "Opened prending for > 30 days", value: 143 },
+{ title: "Disbursed", value: 120 },
+])
+
+Here, DynamicCountCardsConfiguration is a function implemented for input data of cardlist. if data pass as argument it that data if not, show test data
+in Lib, implementd like This:
+
+export const DynamicCountCardsConfiguration = (
+countCardsList?: DynamicCountCardsData[]
+): DynamicCountCardsData[] => {
+if (countCardsList) {
+return countCardsList;
+} else {
+return [
+{ title: "Total Proposals", value: 700, className:"" },
+{ title: "On Process", value: 230 },
+{ title: "Sanctioned", value: 300 },
+{ title: "Rejected", value: 254 },
+{ title: "Opened prending for > 30 days", value: 143 },
+{ title: "Disbursed", value: 120 },
+];
+}
+};
+
+# interfaces for cardsList:
+
+export interface DynamicCountCardsData {
+title: string;
+value: string | number | null;
+className?: string
+}
+
+here, title --- for card header Text display at Top
+value ---- for card body text or number display
+
+** ---- Ended Card List information ---- **
+
+** --- Start Charts Section Information --- **
+
+dashboardChart:DashardCardConfig = [
+{type: columnChart,
+cardTitle: 'Monthly Wise',
+chartOptionData: columnChartOptions,
+chartData: columnchartData,
+className:""
+},
+{type: pieChart,
+cardTitle: 'Total Sanctioned',
+chartOptionData: pieChartOptions,
+chartData: piechartData,
+className:""
+},
+]
+
+# interface:
+
+export interface DashardCardConfig {
+type:string,
+cardTitle:string;
+chartOptionData:ChartOptions;
+chartData:any[],
+className?:string
+}
+
+chartData: this input is used for display data in Charts.
+
+Examples of column or combo chart data:
+columnChartData = [
+["2023/05", 50, 33, 24.5, 33, 22],
+["2023/05", 50, 33, 24.5, 33, 22],
+]
+
+Examples of pie chart:
+
+pieChartData = [
+["retail", 39483, 'red'],
+["agri", 453, 'blue']
+]
+
+example chart option:
+
+columnChartOptions: = {
+myColumns: ["Year", "Retail", "Agri", "MSME", "Gold", "Corp"],
+
+    chartOptions: {
+      title: `Monthly Wise`,
+      chartArea: { width: "50%" },
+      hAxis: {
+        title: `Modules`,
+        minValue: 0,
+      },
+      vAxis: {
+        title: "No. Of Amount",
+      },
+      seriesType: "bars",
+    },
+
+};
+
+Event Emitter
+selectOnChart:SelectChartType: this emit data on chart click
+
+export interface SelectChartType{
+ev:any;
+chartType:string
+}
+
+ex: {ev: event, chartType: columnChart}
+
+** --- End Charts information --- **
+
+** --- Start card table information --- **
+
+smallCardTable: it is a input for small card table array data
+
+example:
+
+cardTableData:CardTableDataConfig ={
+cardTitle: '',
+tableColumnHead:[So.no, 'retail', 'agri', 'msme', 'gold']
+tableData: [{}],
+className: ''
+}
+
+# interfaces
+
+CardTableDataConfig {
+cardTitle:string;
+tableColumnHead: string[];
+tableData: any[],
+className?: string
+}
+
+** --- End card information --- **
+
+** --- Start information --- **
+
+gridTableData: GridTableConfigData = {
+title:'Schemem'
+tableHeads: ['loanType', 'scheme', '']
+tableBodyData: [],
+className: ""
+}
+
+export interface GridTableConfigData{
+title:string;
+tableHeads: string[];
+tableBodyData: [],
+className?:string
+}
