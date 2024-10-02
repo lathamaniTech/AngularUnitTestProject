@@ -1,16 +1,23 @@
-<!-- <lib-ngx-super-dashboard [dynamicFormFieldData]="searchFormFields" ></lib-ngx-super-dashboard> -->
-
 <div class="content-area">
-  <app-dynamic-form
-    [dynamicFormFieldData]="searchFormFields"
-  ></app-dynamic-form>
-  <!-- <lib-ngx-super-dashboard
-    [dynamicFormFieldData]="searchFormFields"
-    (onSelect)="OnSelected($event)"
-    (onSubmit)="OnSearchSubmit($event)"
+  <!-- <app-dynamic-form
+    [dynamicFormFieldData]="dynamicSearchFormFields"
+  ></app-dynamic-form> -->
+
+  <lib-ngx-super-dashboard
+    [dynamicFormFieldData]="dynamicSearchFormFields"
+    (onSelect)="onSelected($event)"
+    (onSubmit)="onSearchSubmit($event)"
     [cardConfig]="countCardsListData"
+    [chartsConfig]="dashboardChartConfig"
+    (onSelectChart)="selectedChart($event)"
+    [gridOneConfig]="cardTableData"
+    [gridTwoConfig]="gridTableData"
   >
-  </lib-ngx-super-dashboard> -->
+  </lib-ngx-super-dashboard>
+
+  <!-- <lib-ngx-dashoard-widget
+    [searchFormFields]="dynamicSearchFormFields"
+  ></lib-ngx-dashoard-widget> -->
 
   <div class="grid-container">
     <div
@@ -43,7 +50,6 @@
           [chartOptionData]="columnChartOptions"
           (chartColumnSelect)="onSelectChart($event)"
         ></app-ng-charts>
-      
       </div>
 
       <div class="card card-border-bottom">
